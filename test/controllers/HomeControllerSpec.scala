@@ -43,6 +43,5 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
       contentType(home) mustBe Some("text/html")
       contentAsString(home) must include ("index.heading") // TODO: not great, stubMessagesControllerComponents provides fake messages
     }
-    }
   }
 }
