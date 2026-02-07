@@ -1,14 +1,16 @@
 package controllers
 
 import play.api.mvc._
-import views.html.Home
+import views.Home
 
 import javax.inject._
 
 @Singleton
-class HomeController @Inject()(home: Home, val controllerComponents: MessagesControllerComponents) extends MessagesBaseController {
+class HomeController @Inject()(home: Home,
+                               mcc: MessagesControllerComponents) extends MessagesAbstractController(mcc)
+  with ScalaTagWritable {
 
-  def show(): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
+  def show(): Action[AnyContent] = Action { implicit request =>
     Ok(home())
   }
 
