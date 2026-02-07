@@ -1,3 +1,5 @@
 # https://www.playframework.com/documentation/latest/ScalaI18N
 
-index.heading       =  Welcome to Play
+home.heading           = Personal Hub
+home.para-one          = In this personal hub, I will be playing around with Play!
+home.para-two          = I intend to develop this in small steps.

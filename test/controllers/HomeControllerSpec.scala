@@ -4,7 +4,7 @@ import org.scalatestplus.play._
 import org.scalatestplus.play.guice._
 import play.api.test._
 import play.api.test.Helpers._
-import views.html.Index
+import views.html.Home
 
 /**
  * Add your spec here.
@@ -17,22 +17,24 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
   "HomeController GET" should {
 
     "render the Index page from a new instance of controller" in {
-      val indexView: Index = inject[Index]
-      val controller = new HomeController(indexView, stubMessagesControllerComponents())
-      val home = controller.home().apply(FakeRequest(GET, "/"))
+      val homeView: Home = inject[Home]
+      val controller = new HomeController(homeView, stubMessagesControllerComponents())
+      val home = controller.show().apply(FakeRequest(GET, "/"))
 
       status(home) mustBe OK
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("index.heading") // TODO: not great, stubMessagesControllerComponents provides fake messages
+      contentAsString(home) must include ("home.heading") // TODO: not great, stubMessagesControllerComponents provides fake messages
     }
 
     "render the Index page from the application" in {
       val controller = inject[HomeController]
-      val home = controller.home().apply(FakeRequest(GET, "/"))
+      val home = controller.show().apply(FakeRequest(GET, "/"))
 
       status(home) mustBe OK
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
+      contentAsString(home) must include ("Personal Hub")
+      contentAsString(home) must include ("In this personal hub, I will be playing around with Play!")
+      contentAsString(home) must include ("I intend to develop this in small steps.")
     }
 
     "render the Index page from the router" in {
@@ -41,7 +43,9 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
 
       status(home) mustBe OK
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
+      contentAsString(home) must include ("Personal Hub")
+      contentAsString(home) must include ("In this personal hub, I will be playing around with Play!")
+      contentAsString(home) must include ("I intend to develop this in small steps.")
     }
   }
 }
