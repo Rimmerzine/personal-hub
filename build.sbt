@@ -1,5 +1,4 @@
 name := """personal-hub"""
-organization := "com.example"
 
 version := "1.0-SNAPSHOT"
 
