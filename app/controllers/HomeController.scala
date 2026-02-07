@@ -6,9 +6,9 @@ import views.html.Index
 import javax.inject._
 
 @Singleton
-class HomeController @Inject()(index: Index, val controllerComponents: ControllerComponents) extends BaseController {
+class HomeController @Inject()(index: Index, val controllerComponents: MessagesControllerComponents) extends MessagesBaseController {
 
-  def home(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+  def home(): Action[AnyContent] = Action { implicit request: MessagesRequest[AnyContent] =>
     Ok(index())
   }
 

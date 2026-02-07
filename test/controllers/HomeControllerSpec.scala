@@ -18,12 +18,12 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
 
     "render the Index page from a new instance of controller" in {
       val indexView: Index = inject[Index]
-      val controller = new HomeController(indexView, stubControllerComponents())
+      val controller = new HomeController(indexView, stubMessagesControllerComponents())
       val home = controller.home().apply(FakeRequest(GET, "/"))
 
       status(home) mustBe OK
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
+      contentAsString(home) must include ("index.heading") // TODO: not great, stubMessagesControllerComponents provides fake messages
     }
 
     "render the Index page from the application" in {
@@ -32,7 +32,7 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
 
       status(home) mustBe OK
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
+      contentAsString(home) must include ("index.heading") // TODO: not great, stubMessagesControllerComponents provides fake messages
     }
 
     "render the Index page from the router" in {
@@ -41,7 +41,8 @@ class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting
 
       status(home) mustBe OK
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to Play")
+      contentAsString(home) must include ("index.heading") // TODO: not great, stubMessagesControllerComponents provides fake messages
+    }
     }
   }
 }

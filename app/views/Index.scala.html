@@ -2,8 +2,8 @@
   main: Main
 )
 
-@()
+@()(implicit messages: Messages)
 
-@main("Welcome to Play") {
-  <h1>Welcome to Play!</h1>
+@main(title = messages("index.heading")) {
+  <h1>@messages("index.heading")</h1>
 }
