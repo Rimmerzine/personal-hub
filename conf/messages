@@ -10,3 +10,5 @@ home.para-two                       = I intend to develop this in small steps.
 notes-hub.heading                   = Notes
 notes-hub.note-title.label          = Note title
 notes-hub.note-body.label           = Note body
+
+error.note.title.empty              = You must provide a note title
