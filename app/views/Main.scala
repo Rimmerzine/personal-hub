@@ -1,10 +1,10 @@
 package views
 
 import scalatags.Text.TypedTag
+import scalatags.Text.all._
+import scalatags.Text.tags2.title
 
 import javax.inject.{Inject, Singleton}
-import scalatags.Text.tags2.title
-import scalatags.Text.all._
 
 @Singleton
 class Main @Inject() {
