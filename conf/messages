@@ -1,5 +1,12 @@
 # https://www.playframework.com/documentation/latest/ScalaI18N
 
-home.heading           = Personal Hub
-home.para-one          = In this personal hub, I will be playing around with Play!
-home.para-two          = I intend to develop this in small steps.
+base.save                           = Save
+base.cancel                         = Cancel
+
+home.heading                        = Personal Hub
+home.para-one                       = In this personal hub, I will be playing around with Play!
+home.para-two                       = I intend to develop this in small steps.
+
+notes-hub.heading                   = Notes
+notes-hub.note-title.label          = Note title
+notes-hub.note-body.label           = Note body
