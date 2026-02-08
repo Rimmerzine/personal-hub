@@ -1,12 +1,13 @@
 package views
 
+import forms.NoteForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 
 class NotesHubViewSpec extends BaseViewSpec {
 
   val notesHub: NotesHub = inject[NotesHub]
-  val document: Document = Jsoup.parse(notesHub().render)
+  val document: Document = Jsoup.parse(notesHub(NoteForm.form).render)
 
   "NotesHub" must {
     "have a title" in {
