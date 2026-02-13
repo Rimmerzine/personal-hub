@@ -2,44 +2,40 @@ package controllers
 
 import forms.FormUtils.FormExtensions
 import forms.NoteForm
-import models.Note
 import play.api.mvc._
+import repositories.NotesRepository
 import views.NotesHub
 
 import javax.inject._
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class NotesHubController @Inject()(notesHub: NotesHub)
-                                  (implicit mcc: MessagesControllerComponents) extends BaseFrontendController {
+class NotesHubController @Inject()(notesHub: NotesHub,
+                                   notesRepository: NotesRepository)
+                                  (implicit mcc: MessagesControllerComponents,
+                                   executionContext: ExecutionContext) extends BaseFrontendController {
 
-  def show(): Action[AnyContent] = Action { implicit request =>
-    Ok(notesHub(
-      noteForm = NoteForm.form.fill(getMaybeSessionNote)
-    ))
+  def show(): Action[AnyContent] = Action.async { implicit request =>
+    notesRepository.findFirstNote map { maybeNote =>
+      Ok(notesHub(
+        noteForm = NoteForm.form.fill(maybeNote)
+      ))
+    }
   }
 
-  def submit(): Action[AnyContent] = Action { implicit request =>
+  def submit(): Action[AnyContent] = Action.async { implicit request =>
     NoteForm.form.bindFromRequest().fold(
       formWithErrors => {
-        BadRequest(notesHub(
+        Future.successful(BadRequest(notesHub(
           noteForm = formWithErrors
-        ))
+        )))
       },
       successfulNote => {
-        Redirect(routes.NotesHubController.show())
-          .addingToSession(
-            "note-title" -> successfulNote.title,
-            "note-body" -> successfulNote.body
-          )
+        notesRepository.saveNote(successfulNote) map { _ =>
+          Redirect(routes.NotesHubController.show())
+        }
       }
     )
-  }
-
-  private def getMaybeSessionNote(implicit request: Request[_]): Option[Note] = {
-    (request.session.get("note-title"), request.session.get("note-body")) match {
-      case (Some(title), Some(body)) => Some(Note(title, body))
-      case _ => None
-    }
   }
 
 }
