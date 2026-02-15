@@ -25,9 +25,11 @@ class MongoComponent @Inject()(configuration: Configuration, lifecycle: Applicat
 
   lazy val database: MongoDatabase = mongoClient.getDatabase(name)
 
+  // $COVERAGE-OFF$
   lifecycle.addStopHook { () =>
     mongoClient.close()
     Future.successful(())
   }
+  // $COVERAGE-ON$
 
 }
