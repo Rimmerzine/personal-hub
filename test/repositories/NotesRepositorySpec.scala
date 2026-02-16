@@ -11,6 +11,20 @@ class NotesRepositorySpec extends RepositorySpec {
     notesRepository.mongoCollection.drop().toFuture().futureValue
   }
 
+  "findNotes" should {
+    "return all notes in the collection" when {
+      "the collection does not contain any notes" in {
+        notesRepository.findNotes().futureValue mustBe Seq.empty[Note]
+      }
+      "the collection contains notes" in {
+        notesRepository.insert(noteOne).futureValue
+        notesRepository.insert(noteTwo).futureValue
+
+        notesRepository.findNotes().futureValue mustBe Seq(noteOne, noteTwo)
+      }
+    }
+  }
+
   "findNote" should {
     "return None when there are no notes found with the id provided in the collection" in {
       notesRepository.findNote("test-id-one").futureValue mustBe None

@@ -14,7 +14,7 @@ class NotesHubController @Inject()(notesHub: NotesHub,
                                    executionContext: ExecutionContext) extends BaseFrontendController {
 
   def show(): Action[AnyContent] = Action.async { implicit request =>
-    notesRepository.findNotes map { notes =>
+    notesRepository.findNotes() map { notes =>
       Ok(notesHub(
         notes = notes
       ))
