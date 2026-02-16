@@ -11,4 +11,9 @@ notes-hub.heading                   = Notes
 notes-hub.note-title.label          = Note title
 notes-hub.note-title.placeholder    = Enter a title for your note
 notes-hub.note-body.label           = Note body
+
+create-note.heading                 = Create a new note
+create-note.note-title.label        = Note title
+create-note.note-title.placeholder  = Enter a title for your note
+create-note.note-body.label         = Note body
 error.note.title.empty              = You must provide a note title

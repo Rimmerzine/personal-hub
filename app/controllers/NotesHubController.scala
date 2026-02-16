@@ -1,13 +1,11 @@
 package controllers
 
-import forms.FormUtils.FormExtensions
-import forms.NoteForm
 import play.api.mvc._
 import repositories.NotesRepository
 import views.NotesHub
 
 import javax.inject._
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class NotesHubController @Inject()(notesHub: NotesHub,
@@ -16,26 +14,11 @@ class NotesHubController @Inject()(notesHub: NotesHub,
                                    executionContext: ExecutionContext) extends BaseFrontendController {
 
   def show(): Action[AnyContent] = Action.async { implicit request =>
-    notesRepository.findFirstNote map { maybeNote =>
+    notesRepository.findNotes map { notes =>
       Ok(notesHub(
-        noteForm = NoteForm.form.fill(maybeNote)
+        notes = notes
       ))
     }
-  }
-
-  def submit(): Action[AnyContent] = Action.async { implicit request =>
-    NoteForm.form.bindFromRequest().fold(
-      formWithErrors => {
-        Future.successful(BadRequest(notesHub(
-          noteForm = formWithErrors
-        )))
-      },
-      successfulNote => {
-        notesRepository.saveNote(successfulNote) map { _ =>
-          Redirect(routes.NotesHubController.show())
-        }
-      }
-    )
   }
 
 }

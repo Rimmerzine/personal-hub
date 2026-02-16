@@ -14,12 +14,14 @@ class NotesRepository @Inject()(mongoComponent: MongoComponent)
   collectionName = "notes"
 ) {
 
-  def findFirstNote: Future[Option[Note]] = {
-    findOne()
+  def findNotes(): Future[Seq[Note]] = find()
+
+  def findNote(id: String): Future[Option[Note]] = {
+    findOne(equal("id", id))
   }
 
   def saveNote(note: Note): Future[Boolean] = {
-    replace(equal("title", note.title), note)
+    replace(equal("id", note.id), note)
   }
 
 }

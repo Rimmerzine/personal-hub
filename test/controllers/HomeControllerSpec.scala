@@ -24,7 +24,7 @@ class HomeControllerSpec extends BaseControllerSpec with MockitoSugar with Befor
     mockView
   )
 
-  "HomeController.show" must {
+  "show" must {
     "return OK with HTML content" in {
       when(mockView()(ArgumentMatchers.any())).thenReturn(html())
 

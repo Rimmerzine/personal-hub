@@ -6,7 +6,7 @@ import org.scalatest.{Assertion, Succeeded}
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Messages, MessagesApi}
-import play.api.mvc.AnyContent
+import play.api.mvc.{AnyContent, Call}
 import play.api.test.{FakeRequest, Injecting}
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
@@ -15,6 +15,8 @@ trait BaseViewSpec extends PlaySpec with GuiceOneAppPerSuite with Injecting {
 
   implicit val request: FakeRequest[AnyContent] = FakeRequest()
   implicit val messages: Messages = inject[MessagesApi].preferred(request)
+
+  val testCall = Call("POST", "/")
 
   implicit class ElementSelectors(element: Element) {
 

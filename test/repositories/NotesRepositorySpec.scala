@@ -1,6 +1,6 @@
 package repositories
 
-import models.Note
+import models.{Note, NoteDetail}
 import repositories.utils.RepositorySpec
 
 class NotesRepositorySpec extends RepositorySpec {
@@ -11,42 +11,40 @@ class NotesRepositorySpec extends RepositorySpec {
     notesRepository.mongoCollection.drop().toFuture().futureValue
   }
 
-  "findFirstNote" should {
-
-    "return None when there are no notes in the collection" in {
-      notesRepository.findFirstNote.futureValue mustBe None
+  "findNote" should {
+    "return None when there are no notes found with the id provided in the collection" in {
+      notesRepository.findNote("test-id-one").futureValue mustBe None
     }
-
-    "return the first inserted note when notes exist in the collection" in {
+    "return a note when a matching note exists in the collection" in {
       notesRepository.insert(noteOne).futureValue
       notesRepository.insert(noteTwo).futureValue
 
-      notesRepository.findFirstNote.futureValue mustBe Some(noteOne)
+      notesRepository.findNote("test-id-one").futureValue mustBe Some(noteOne)
+      notesRepository.findNote("test-id-two").futureValue mustBe Some(noteTwo)
     }
-
   }
 
   "saveNote" should {
 
     "insert a new note when it does not exist" in {
       notesRepository.saveNote(noteOne).futureValue mustBe true
-      notesRepository.findFirstNote.futureValue mustBe Some(noteOne)
+      notesRepository.findNote(noteOne.id).futureValue mustBe Some(noteOne)
     }
 
     "update an existing note with the same title" in {
       notesRepository.saveNote(noteOne).futureValue
 
-      val updated = noteOne.copy(body = "updated-body")
+      val updated = noteOne.copy(detail = noteOne.detail.copy(body = "updated-body"))
 
       notesRepository.saveNote(updated).futureValue mustBe true
-      notesRepository.findFirstNote.futureValue mustBe Some(updated)
+      notesRepository.findNote(noteOne.id).futureValue mustBe Some(updated)
     }
 
   }
 
   lazy val notesRepository: NotesRepository = application.injector.instanceOf[NotesRepository]
 
-  lazy val noteOne: Note = Note("test-title-one", "test-body-one")
-  lazy val noteTwo: Note = Note("test-title-two", "test-body-two")
+  lazy val noteOne: Note = Note("test-id-one", NoteDetail("test-title-one", "test-body-one"))
+  lazy val noteTwo: Note = Note("test-id-two", NoteDetail("test-title-two", "test-body-two"))
 
 }

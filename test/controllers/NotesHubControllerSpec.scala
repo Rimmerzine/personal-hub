@@ -1,7 +1,6 @@
 package controllers
 
-import forms.NoteForm
-import models.Note
+import models.{Note, NoteDetail}
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import repositories.mocks.MockNotesRepository
@@ -18,13 +17,13 @@ class NotesHubControllerSpec extends BaseControllerSpec
     mockView, mockRepository
   )
 
-  "NotesHubController.show" must {
+  "show" must {
     "return OK with HTML content" when {
-      "there was a note available in the database to pre-fill the form" in {
-        val note: Note = Note("test-title", "test-body")
+      "there were notes available in the collection" in {
+        val notes: Seq[Note] = Seq(Note("test-id", NoteDetail("test-title", "test-body")))
 
-        mockFindFirstNote(Some(note))
-        mockNotesHub(NoteForm.form.fill(note))
+        mockFindNotes(notes)
+        mockNotesHub(notes)
 
         val result: Future[Result] = TestNotesHubController.show()(request)
 
@@ -32,44 +31,12 @@ class NotesHubControllerSpec extends BaseControllerSpec
         contentType(result) mustBe Some(HTML)
       }
       "there was not a note available in session" in {
-        mockFindFirstNote(None)
-        mockNotesHub(NoteForm.form)
+        mockFindNotes(Seq.empty[Note])
+        mockNotesHub(Seq.empty[Note])
 
         val result: Future[Result] = TestNotesHubController.show()(request)
 
         status(result) mustBe OK
-        contentType(result) mustBe Some(HTML)
-      }
-    }
-  }
-
-  "NotesHubController.submit" when {
-    "valid form data is submitted" must {
-      "save the note to the database, return SEE_OTHER and redirect to the notes hub url" in {
-        val note: Note = Note("test-title", "test-body")
-
-        mockSaveNote(note)
-
-        val result = TestNotesHubController.submit()(
-          request.withFormUrlEncodedBody(
-            NoteForm.titleKey -> note.title,
-            NoteForm.bodyKey -> note.body
-          )
-        )
-
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.NotesHubController.show().url)
-      }
-    }
-    "invalid form data is submitted" must {
-      "return a BAD_REQUEST with HTML content" in {
-        mockNotesHub(
-          form = NoteForm.form.bind(Map.empty[String, String])
-        )
-
-        val result = TestNotesHubController.submit()(request)
-
-        status(result) mustBe BAD_REQUEST
         contentType(result) mustBe Some(HTML)
       }
     }
