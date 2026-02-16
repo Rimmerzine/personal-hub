@@ -1,19 +1,19 @@
 package forms
 
-import models.Note
+import models.{Note, NoteDetail}
 import play.api.data.Form
 import play.api.data.Forms.{default, mapping, text}
 
-object NoteForm {
+object NoteDetailForm {
 
   val titleKey: String = "note-title"
   val bodyKey: String = "note-body"
 
-  val form: Form[Note] = Form(
+  val form: Form[NoteDetail] = Form(
     mapping(
       titleKey -> default(text, "").verifying("error.note.title.empty", _.nonEmpty),
       bodyKey -> default(text, "")
-    )(Note.apply)(Note.unapply)
+    )(NoteDetail.apply)(NoteDetail.unapply)
   )
 
 }

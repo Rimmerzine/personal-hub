@@ -19,8 +19,13 @@ trait MockNotesRepository extends MockitoSugar with BeforeAndAfterEach {
 
   val mockRepository: NotesRepository = mock[NotesRepository]
 
-  def mockFindFirstNote(result: Option[Note]): Unit = {
-    when(mockRepository.findFirstNote)
+  def mockFindNotes(notes: Seq[Note]): Unit = {
+    when(mockRepository.findNotes())
+      .thenReturn(Future.successful(notes))
+  }
+
+  def mockFindNote(id: String)(result: Option[Note]): Unit = {
+    when(mockRepository.findNote(ArgumentMatchers.eq(id)))
       .thenReturn(Future.successful(result))
   }
 

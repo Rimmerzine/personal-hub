@@ -9,7 +9,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class Main @Inject() {
 
-  def apply(pageTitle: String)(content: TypedTag[String]*): TypedTag[String] = {
+  def apply(pageTitle: String)(content: Modifier*): TypedTag[String] = {
     html(
       head(
         title(pageTitle),
